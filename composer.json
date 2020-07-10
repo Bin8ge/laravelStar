@@ -1,0 +1,20 @@
+{
+    "name": "bingo/laravelstar",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "bingo",
+            "email": "3362235297@qq.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "LaravelStar\\": "src"
+        },
+        "files": [
+            "src/Support/helpers.php"
+        ]
+
+    }
+}
