@@ -23,6 +23,7 @@ class Application extends Container
 //        $this->registerBaseServiceProviders();
         //注册核心应用容器别名
         $this->registerCoreContainerAliases();
+        \LaravelStar\Support\Facades\Facade::setFacadeApplication($this);
     }
 
 
@@ -44,7 +45,12 @@ class Application extends Container
         $binds = [
             'config' => \LaravelStar\Config\Config::class,
             'cookie' => \LaravelStar\Cookie\Cookie::class,
-            'db' => \LaravelStar\Database\Mysql::class
+            'db' => \LaravelStar\Databases\Oracle::class
+//            'db' => [
+//                \LaravelStar\Database\Oracle::class,
+//                \LaravelStar\Contracts\Database\Db::class
+//            ],
+
         ];
 
         foreach ($binds as $key => $bind) {

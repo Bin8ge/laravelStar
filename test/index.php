@@ -11,4 +11,4 @@ use LaravelStar\Foundation\Application;
 
 //var_dump((new Application())->getBindings());
 //var_dump((new Application())->make('db')->find());
-var_dump(app('db')->find());
+var_dump(app('db')->select());

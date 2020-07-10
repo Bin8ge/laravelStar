@@ -2,7 +2,8 @@
 
 namespace LaravelStar\Container;
 use Closure;
-class Container
+use ArrayAccess;
+class Container implements ArrayAccess
 {
     protected static $instance;
     //容器
@@ -34,7 +35,6 @@ class Container
      */
     public function bind($abstract,$concrete,$shared = false )
     {
-
         $this->bindings[$abstract]['concrete'] = $concrete;
         $this->bindings[$abstract]['shared']  = $shared;
 
@@ -81,16 +81,18 @@ class Container
      */
     public function resolve($abstract, $parameters = [])
     {
-        if (!$this->has($abstract)) {
-            throw new \Exception('解析的对象不存在'.$abstract,500);
-        }
+//        if (!$this->has($abstract)) {
+//            throw new \Exception('解析的对象不存在'.$abstract,500);
+//        }
 
         //判断是否创建过单例
         if (isset($this->instances[$abstract])) {
             return $this->instances[$abstract];
         }
 
-        $object = $this->bindings[$abstract]['concrete'];
+        $object = $this->getConrete($abstract);
+
+
 
 
 
@@ -106,11 +108,21 @@ class Container
         }
 
         # 判断是否为单例
-        if ($this->bindings[$abstract]['shared']) {
+        if ($this->has($abstract) && $this->bindings[$abstract]['shared']) {
             $this->instances[$abstract] = $object;
         }
 
         return $object;
+    }
+
+
+    public function getConrete($abstract)
+    {
+        if ($this->has($abstract)) {
+            $abstract = $this->bindings[$abstract]['concrete'];
+        }
+        return $abstract;
+
     }
 
     /**
@@ -178,4 +190,64 @@ class Container
         return static::$instance;
     }
 
+    /**
+     * Whether a offset exists
+     * @link https://php.net/manual/en/arrayaccess.offsetexists.php
+     * @param mixed $offset <p>
+     * An offset to check for.
+     * </p>
+     * @return bool true on success or false on failure.
+     * </p>
+     * <p>
+     * The return value will be casted to boolean if non-boolean was returned.
+     * @since 5.0.0
+     */
+    public function offsetExists($offset)
+    {
+        // TODO: Implement offsetExists() method.
+    }
+
+    /**
+     * Offset to retrieve
+     * @link https://php.net/manual/en/arrayaccess.offsetget.php
+     * @param $key
+     * @return mixed Can return all value types.
+     * @throws \Exception
+     * @since 5.0.0
+     */
+    public function offsetGet($key)
+    {
+       return $this->make($key);
+    }
+
+    /**
+     * Offset to set
+     * @link https://php.net/manual/en/arrayaccess.offsetset.php
+     * @param mixed $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     * @param mixed $value <p>
+     * The value to set.
+     * </p>
+     * @return void
+     * @since 5.0.0
+     */
+    public function offsetSet($offset, $value)
+    {
+        // TODO: Implement offsetSet() method.
+    }
+
+    /**
+     * Offset to unset
+     * @link https://php.net/manual/en/arrayaccess.offsetunset.php
+     * @param mixed $offset <p>
+     * The offset to unset.
+     * </p>
+     * @return void
+     * @since 5.0.0
+     */
+    public function offsetUnset($offset)
+    {
+        // TODO: Implement offsetUnset() method.
+    }
 }
