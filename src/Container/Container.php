@@ -93,9 +93,6 @@ class Container implements ArrayAccess
         $object = $this->getConrete($abstract);
 
 
-
-
-
         //判断是否是闭包
         if ($object instanceof Closure){
             //如果是 执行

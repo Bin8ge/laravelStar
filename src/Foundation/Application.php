@@ -33,6 +33,11 @@ class Application extends Container
 
     }
 
+    public function getBasePath()
+    {
+        return $this->basePath;
+    }
+
     protected function registerBaseBindings()
     {
         //设置自己为单例实例对象
@@ -57,6 +62,14 @@ class Application extends Container
             $this->bind($key,$bind);
         }
 
+    }
+
+
+    public function bootstrapWith(array $bootstrappers)
+    {
+        foreach ($bootstrappers as $bootstrapper) {
+            $this->make($bootstrapper)->bootstrap($this);
+        }
     }
 
 }
