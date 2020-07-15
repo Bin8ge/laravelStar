@@ -5,9 +5,12 @@ namespace LaravelStar\Foundation;
 use LaravelStar\Container\Container;
 
 
+
 class Application extends Container
 {
     protected $basePath;
+    protected $serviceProviders;
+    protected $booted = false;
 
     public function __construct($basePath = null)
     {
@@ -26,13 +29,33 @@ class Application extends Container
         \LaravelStar\Support\Facades\Facade::setFacadeApplication($this);
     }
 
+    public function boot()
+    {
+        # 对于应用来说 事先执行
+        if($this->booted)
+        {
+            return ;
+        }
 
+        foreach ($this->serviceProviders as $key => $provider){
+            if (method_exists($provider,'boot')) {
+                $provider->boot();
+            }
+
+        }
+
+        $this->booted = true;
+    }
+
+
+    #  设置项目地址
     public function setBasePath($basePath)
     {
         $this->basePath = rtrim($basePath, '\/');
 
     }
 
+    # 获取项目地址
     public function getBasePath()
     {
         return $this->basePath;
@@ -50,7 +73,8 @@ class Application extends Container
         $binds = [
             'config' => \LaravelStar\Config\Config::class,
             'cookie' => \LaravelStar\Cookie\Cookie::class,
-            'db' => \LaravelStar\Databases\Oracle::class
+            'db' => \LaravelStar\Databases\Oracle::class,
+            'route' => \LaravelStar\Router\Route::class
 //            'db' => [
 //                \LaravelStar\Database\Oracle::class,
 //                \LaravelStar\Contracts\Database\Db::class
@@ -62,6 +86,23 @@ class Application extends Container
             $this->bind($key,$bind);
         }
 
+    }
+
+    # 对配置文件的服务提供者 完成注册
+    public function registerConfiguredProviders()
+    {
+
+        $provider = $this->make('config')->get('app.provider');
+
+        (new ProviderRegister($this))->load($provider);
+
+    }
+
+
+    #记录解析的服务提供者
+    public function marASRegistered($provider)
+    {
+        $this->serviceProviders[] = $provider;
     }
 
 

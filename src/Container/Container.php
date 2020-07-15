@@ -19,10 +19,10 @@ class Container implements ArrayAccess
 //    protected $aliases = [];
 //    protected $abstractAliases = [];
 
-    public function __construct()
-    {
-         //self::setInstance($this);
-    }
+//    public function __construct()
+//    {
+//         //self::setInstance($this);
+//    }
 
     /**
      * Notes:
@@ -67,6 +67,8 @@ class Container implements ArrayAccess
     {
           return $this->resolve($abstract,$parameters);
     }
+
+
 
     /**
      * Notes:

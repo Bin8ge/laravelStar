@@ -4,11 +4,10 @@
 namespace LaravelStar\Support\Facades;
 
 
-class DB extends Facade
+class Route extends Facade
 {
     protected static function getFacadeAccessor()
     {
-       return \LaravelStar\Databases\Oracle::class;
-//       return 'route';
+        return 'route';
     }
 }

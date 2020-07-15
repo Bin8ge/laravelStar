@@ -14,6 +14,8 @@ class Kernel implements Contracts
     protected $bootstrappers = [
         \LaravelStar\Foundation\Bootstrap\RegisterFacades::class,
         \LaravelStar\Foundation\Bootstrap\LoadConfiguration::class,
+        \LaravelStar\Foundation\Bootstrap\RegisterProviders::class,
+        \LaravelStar\Foundation\Bootstrap\BootProviders::class,
 
     ];
 

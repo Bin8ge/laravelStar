@@ -73,7 +73,6 @@ abstract class Facade
     {
         $instance = static::getFacadeRoot();
 
-
         if (! $instance) {
             throw new \Exception('sorry ,灭有找到',500);
         }
