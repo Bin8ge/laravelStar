@@ -2,6 +2,8 @@
 namespace LaravelStar\Foundation\Http;
 use LaravelStar\Contracts\Http\Kernel as Contracts;
 use LaravelStar\Foundation\Application;
+use LaravelStar\Pipeline\Pipeline;
+use LaravelStar\Request\Request;
 
 #处理http请求的类
 class Kernel implements Contracts
@@ -16,7 +18,6 @@ class Kernel implements Contracts
         \LaravelStar\Foundation\Bootstrap\LoadConfiguration::class,
         \LaravelStar\Foundation\Bootstrap\RegisterProviders::class,
         \LaravelStar\Foundation\Bootstrap\BootProviders::class,
-
     ];
 
 
@@ -26,17 +27,44 @@ class Kernel implements Contracts
     }
 
 
-    public function handle($request = null)
+    public function handle(Request $request)
     {
-        $this->sendRequestThroughRouter($request);
+        return $this->sendRequestThroughRouter($request);
 
     }
 
-    public function sendRequestThroughRouter($request= null)
+    /**
+     * Notes: 根据请求分发到响应的路由 并且输出运行结果
+     * User: bingo
+     * Date: 2020/7/16
+     * Time: 16:32
+     * @param Request $request
+     * @return
+     * @throws \Exception
+     */
+    public function sendRequestThroughRouter(Request $request)
     {
+        # 加载框架的驱动方法
         $this->bootstrap();
+
+        $this->app->instance('request', $request);
+        //return $this->app->make('route')->dispatch($request);
+
+        return (new Pipeline($this->app))
+            ->send($request)
+            ->through($this->middleware)
+            ->then($this->dispatchToRouter());
     }
 
+
+    protected function dispatchToRouter()
+    {
+        return function ($request) {
+            $this->app->instance('request', $request);
+
+             return $this->app->make('route')->dispatch($request);
+        };
+    }
     /**
      * Notes: 加载框架驱动的方法
      * User: bingo

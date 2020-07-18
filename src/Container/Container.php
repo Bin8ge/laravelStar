@@ -163,7 +163,6 @@ class Container implements ArrayAccess
     {
         $this->removeBindings($abstract);
         $this->instances[$abstract] = $instance;
-
     }
 
     protected function removeBindings($abstract)
@@ -177,7 +176,9 @@ class Container implements ArrayAccess
 
     public static function setInstance($container = null)
     {
+
         return static::$instance = $container;
+
     }
 
     public static function getInstance()
@@ -185,6 +186,8 @@ class Container implements ArrayAccess
         if (is_null(static::$instance)) {
             static::$instance = new static;
         }
+
+
 
         return static::$instance;
     }

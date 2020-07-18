@@ -1,9 +1,9 @@
 <?php
+
 namespace LaravelStar\Foundation;
 
 
 use LaravelStar\Container\Container;
-
 
 
 class Application extends Container
@@ -32,16 +32,15 @@ class Application extends Container
     public function boot()
     {
         # 对于应用来说 事先执行
-        if($this->booted)
-        {
-            return ;
+        if ($this->booted) {
+            return;
         }
 
-        foreach ($this->serviceProviders as $key => $provider){
-            if (method_exists($provider,'boot')) {
+        foreach ($this->serviceProviders as $key => $provider) {
+
+            if (method_exists($provider, 'boot')) {
                 $provider->boot();
             }
-
         }
 
         $this->booted = true;
@@ -74,7 +73,7 @@ class Application extends Container
             'config' => \LaravelStar\Config\Config::class,
             'cookie' => \LaravelStar\Cookie\Cookie::class,
             'db' => \LaravelStar\Databases\Oracle::class,
-            'route' => \LaravelStar\Router\Route::class
+            'route' => \LaravelStar\Router\Router::class
 //            'db' => [
 //                \LaravelStar\Database\Oracle::class,
 //                \LaravelStar\Contracts\Database\Db::class
@@ -83,7 +82,7 @@ class Application extends Container
         ];
 
         foreach ($binds as $key => $bind) {
-            $this->bind($key,$bind);
+            $this->bind($key, $bind);
         }
 
     }
