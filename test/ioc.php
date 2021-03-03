@@ -61,3 +61,5 @@ $ioc->bind('db',alipay::class);
 //var_dump(zhifu::class);
 //var_dump($ioc->getBindings());
 var_dump($ioc->make('db')->pay());
+
+
